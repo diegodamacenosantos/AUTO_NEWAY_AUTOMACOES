@@ -25,12 +25,31 @@ Cada mensagem passa por quatro etapas, todas opcionais:
 3. **Gravar**
 4. **Enviar** (e **Publicar MQTT**)
 
+### Todos os campos do nó
+
+| Campo | O que faz |
+|---|---|
+| Nome | rótulo do nó no fluxo (opcional) |
+| Receber por: MQTT | marcado, o nó se inscreve sozinho em um tópico MQTT e recebe o que chegar nele |
+| Broker | o servidor MQTT (nó de configuração `mqtt-broker` do Node-RED) |
+| Tópico | o tópico a ouvir; aceita `+` (um nível) e `#` (todos os níveis) |
+| QoS | garantia de entrega do MQTT: 0, 1 ou 2 |
+| Receber por: MSG | marcado, o nó ganha uma porta de entrada para ligar por fio, recebendo mensagens de outros nós |
+| Entrada | a lista de valores lidos da mensagem; cada linha tem Propriedade e Global (abaixo) |
+| Conversão | regras que traduzem o valor recebido para o valor que será gravado (opcional) |
+| Saída | regras que decidem quando e o que enviar pelas saídas |
+| Latitude, Longitude | posição da casa, usada só pelas condições de Horário com `nascer` e `por` (do sol) |
+| Publicar: MQTT | marcado, o nó também publica as saídas direto num broker, sem `mqtt out` |
+| Publicar: Broker, Tópico, QoS | o servidor, o tópico e a garantia de entrega da publicação |
+| Publicar: Retain | o broker guarda a última mensagem e a entrega a quem se inscrever depois |
+
 ### Receber por
 
 Duas caixas, que podem ficar marcadas juntas:
 
 - **MQTT**: o próprio nó se inscreve no tópico (Broker, Tópico e QoS; aceita `+` e `#`). Não precisa de nó `mqtt in`.
-- **MSG**: o nó tem uma porta de entrada para ligar por fio.
+- **MSG**: o nó tem uma porta de entrada para ligar por fio. Sem nenhuma caixa marcada, o nó fica sem porta de entrada.
+- Sem broker escolhido, o nó escuta apenas a entrada por fio. Com broker e sem tópico, o nó avisa "sem tópico".
 
 O broker é o mesmo nó de configuração `mqtt-broker` do Node-RED. O payload pode ser objeto, texto JSON ou Buffer.
 
