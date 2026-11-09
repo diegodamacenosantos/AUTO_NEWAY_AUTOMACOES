@@ -62,7 +62,7 @@ Uma lista numerada. Cada linha tem:
 
 ### Converter (opcional)
 
-Regras que decidem o valor a gravar: **Converter** (qual entrada), condição, **valor alvo** e **Gravar** (texto, número ou o valor como veio). A primeira regra que cumprir define o valor. Exemplos: `1` grava `Dia` e `0` grava `Noite`; `ONLINE` grava `ON`.
+Regras que decidem o valor a gravar: **Converter** (qual entrada), condição, **valor alvo** e **Gravar** (o valor que vai para a global: texto, número ou **Entrada**, o valor como veio). A primeira regra que cumprir define o valor. Exemplos: `1` grava `Dia` e `0` grava `Noite`; `ONLINE` grava `ON`.
 
 Atenção: se houver regras de conversão e nenhuma cumprir, o valor é ignorado.
 
@@ -74,13 +74,13 @@ Regras como no nó *switch*. Todas são conferidas, e a regra **senão** só dis
 - **Propriedade de saída**: onde colocar o valor (`msg.payload` por padrão, ou `msg.payload.chave`, `flow.`, `global.`);
 - **Condição** e **valor alvo**;
 - **Esperar X segundos**: com 0, envia na hora; acima de 0, espera e **cancela** se chegar um valor que deixa de cumprir a condição (ideal para ocupação: o OFF só sai depois de 15 s sem presença);
-- **Enviar**: texto, número, verdadeiro/falso, JSON, alternar, ou o valor recebido.
+- **Enviar**: o que sai. Escolha o tipo: texto, número, verdadeiro/falso, JSON (JSON inválido não envia nada), **Entrada** (o valor recebido) ou **Alternar (global)**: você digita o nome de uma global e sai `OFF` se ela está em `ON`, ou `ON` nos outros casos.
 
 ### Condições
 
 `==`, `!=`, `<`, `<=`, `>`, `>=`, entre, contém, regex, é verdadeiro, é falso, é nulo, não é nulo, é vazio, não é vazio, **senão** e **Horário**.
 
-**Horário**: verdadeiro quando a hora do momento está entre **Das** e **Até**, nos dias da semana marcados. Cada ponta é `HH:MM`, `nascer` ou `por`, com deslocamento em minutos (`por-30`, `nascer+15`). Intervalos que passam da meia-noite valem. Nascer e pôr do sol usam a Latitude e Longitude do nó.
+**Horário**: verdadeiro quando a hora do momento está entre **Das** e **Até**, nos dias da semana marcados. Em cada ponta você escolhe numa lista: **Hora** (e digita o horário, como `18:30`), **Nascer do sol** ou **Pôr do sol** (e digita o deslocamento em minutos: negativo é antes, positivo é depois, como `-30` ou `15`). Intervalos que passam da meia-noite valem. Nascer e pôr do sol usam a Latitude e Longitude do nó.
 
 ### Sem repetição
 
