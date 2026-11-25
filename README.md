@@ -41,7 +41,7 @@ No **Estado**, cada Entrada tem duas caixas que não funcionam juntas (marcar um
 
 Sem nenhuma das duas caixas, com Propriedade `global.` ou `flow.`, a Entrada observa mudanças da variável.
 
-Na **Leitura de Estado** e no **Comando** a Entrada também pode ser MQTT.
+No **Comando** a Entrada também pode ser MQTT. A **Leitura de Estado** não tem MQTT na Entrada: ela lê `msg.` (da mensagem que dispara o nó), `flow.` ou `global.`; para receber de um tópico use o **Estado**.
 
 ## Saída
 
