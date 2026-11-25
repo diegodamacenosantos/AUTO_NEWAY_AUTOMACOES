@@ -41,7 +41,7 @@ No **Estado**, cada Entrada tem duas caixas que não funcionam juntas (marcar um
 
 Sem nenhuma das duas caixas, com Propriedade `global.` ou `flow.`, a Entrada observa mudanças da variável.
 
-No **Comando** a Entrada também pode ser MQTT. A **Leitura de Estado** não tem MQTT na Entrada: ela lê `msg.` (da mensagem que dispara o nó), `flow.` ou `global.`; para receber de um tópico use o **Estado**.
+No **Comando** a Entrada também pode ser MQTT (ela é alimentada só pelo tópico; a mensagem do fio alimenta as outras Entradas). A **Leitura de Estado** não tem MQTT na Entrada: ela lê `msg.` (da mensagem que dispara o nó), `flow.` ou `global.`; para receber de um tópico use o **Estado**.
 
 ## Saída
 
@@ -52,9 +52,9 @@ Uma lista de regras. **Todas as regras são conferidas**: cada uma que cumpre a 
 | Selecionar | qual Entrada a regra observa (ou qualquer uma) |
 | Se | condição: **Ignorar** (padrão, sempre dispara), `==`, `!=`, `<`, `<=`, `>`, `>=`, Entre, Contém, Regex, É verdadeiro, É falso, É nulo, Não é nulo, É vazio, Não é vazio e **Hora \| Sol** |
 | Valor alvo | com o que comparar (texto ou número) |
-| Esperar Por | (só aparece quando o Se tem condição, não em Ignorar) segundos de espera antes de enviar ("X segundos se não mudar"); se o valor deixar de cumprir a condição durante a espera, o envio é cancelado (ocupação com atraso para desligar) |
+| Esperar Por | (só aparece quando o Se tem condição, não em Ignorar) segundos de espera antes de enviar ("X segundos se não mudar"); se o valor deixar de cumprir a condição durante a espera, o envio é cancelado (ocupação com atraso para desligar); com `global.` ou `flow.`, o nó relê a variável no fim da espera |
 | Enviar | texto, número, booleano, JSON ou **Entrada** (o valor recebido) |
-| Enviar Sempre | (Estado) marcado, envia a cada disparo; desmarcado, ignora o resultado igual ao último enviado |
+| Enviar Sempre | (Estado) marcado, envia a cada disparo; desmarcado, a regra ignora o valor igual ao último que ela mesma enviou (volta a enviar depois que outra regra mudar o estado) |
 | MQTT | publica direto no broker (Broker, Tópico, QoS, Retain) |
 | Gravar Global | grava o valor numa variável global |
 | MSG | envia o valor pela porta de saída (Propriedade `msg.`, `payload` por padrão); só regras com MSG marcada têm porta |
