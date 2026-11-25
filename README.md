@@ -52,7 +52,7 @@ Uma lista de regras. **Todas as regras são conferidas**: cada uma que cumpre a 
 | Selecionar | qual Entrada a regra observa (ou qualquer uma) |
 | Se | condição: **Ignorar** (padrão, sempre dispara), `==`, `!=`, `<`, `<=`, `>`, `>=`, Entre, Contém, Regex, É verdadeiro, É falso, É nulo, Não é nulo, É vazio, Não é vazio e **Hora \| Sol** |
 | Valor alvo | com o que comparar (texto ou número) |
-| Esperar Por | segundos de espera antes de enviar; se o valor deixar de cumprir a condição durante a espera, o envio é cancelado (ocupação com atraso para desligar) |
+| Esperar Por | (só aparece quando o Se tem condição, não em Ignorar) segundos de espera antes de enviar ("X segundos se não mudar"); se o valor deixar de cumprir a condição durante a espera, o envio é cancelado (ocupação com atraso para desligar) |
 | Enviar | texto, número, booleano, JSON ou **Entrada** (o valor recebido) |
 | Enviar Sempre | (Estado) marcado, envia a cada disparo; desmarcado, ignora o resultado igual ao último enviado |
 | MQTT | publica direto no broker (Broker, Tópico, QoS, Retain) |
