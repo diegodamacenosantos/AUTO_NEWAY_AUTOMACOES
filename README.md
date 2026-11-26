@@ -54,6 +54,7 @@ Uma lista de regras. **Todas as regras são conferidas**: cada uma que cumpre a 
 | Selecionar | qual Entrada a regra observa (ou qualquer uma) |
 | Se | condição: **Ignorar** (padrão, sempre dispara), `==`, `!=`, `<`, `<=`, `>`, `>=`, Entre, Contém, Regex, É verdadeiro, É falso, É nulo, Não é nulo, É vazio, Não é vazio (número e verdadeiro/falso contam como não vazios, inclusive `0` e `false`) e **Hora \| Sol** |
 | Valor alvo | com o que comparar (texto ou número) |
+| E | abre mais um degrau de condição (veja **Escada de condições**) |
 | Esperar Por | (só aparece quando o Se tem condição, não em Ignorar) segundos de espera antes de enviar ("X segundos se não mudar"); se o valor deixar de cumprir a condição durante a espera, o envio é cancelado (ocupação com atraso para desligar); com `global.` ou `flow.`, o nó relê a variável no fim da espera |
 | Enviar | texto, número, booleano, JSON ou **Entrada** (o valor recebido) |
 | Enviar Sempre | (Estado) marcado, envia a cada disparo; desmarcado, a regra ignora o valor igual ao último que ela mesma enviou (volta a enviar depois que outra regra mudar o estado) |
@@ -62,6 +63,21 @@ Uma lista de regras. **Todas as regras são conferidas**: cada uma que cumpre a 
 | MSG | envia o valor pela porta de saída (Propriedade `msg.`, `payload` por padrão); só regras com MSG marcada têm porta |
 
 O operador **Hora | Sol** é verdadeiro quando a hora do momento está entre **Das** e **Até**, nos **Dias** marcados. Cada ponta é uma hora fixa ou, na Leitura de Estado e no Comando, também nascer ou pôr do sol, com deslocamento em minutos. O intervalo pode passar da meia-noite.
+
+### Escada de condições
+
+Marcando **E** abaixo do **Se**, a regra ganha mais um degrau, e cada degrau pode abrir outro. A regra só vale se **todos** os degraus valerem.
+
+- **Só o primeiro degrau dispara** (o Selecionar da regra, que aceita qualquer tipo de Entrada).
+- Os degraus **E** apenas **conferem o valor atual** de Entradas `global.` ou `flow.`, com comparações (`==`, `!=`, `<`, `<=`, `>`, `>=`, Entre, Contém, Regex, É verdadeiro, É falso, É vazio, Não é vazio). Variável que não existe torna a condição falsa.
+- Todas as regras leem as variáveis antes de qualquer uma gravar.
+- Uma mudança numa variável de degrau **nunca dispara** a regra; ela só faz a regra esquecer o que já enviou, para o mesmo comando voltar a valer (conferido a cada 1 s e a cada disparo).
+- Com **Esperar Por**, o nó confere a escada de novo no fim da espera; uma mudança que vai e volta no meio da espera não é vista.
+- Com Selecionar em **Qualquer entrada** não há E.
+
+Exemplo, liga e desliga por voz: regra 1: comando `== quarto` **E** interruptor `== OFF` enviando `ON`; regra 2: comando `== quarto` **E** interruptor `== ON` enviando `OFF`.
+
+Atenção em "presença **E** noite": se anoitecer com a pessoa já no cômodo, nada acontece até a presença mudar.
 
 ## Localização
 
