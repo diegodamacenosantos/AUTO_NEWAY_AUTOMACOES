@@ -55,7 +55,7 @@ Uma lista de regras. **Todas as regras são conferidas**: cada uma que cumpre a 
 | Se | condição: **Ignorar** (padrão, sempre dispara), `==`, `!=`, `<`, `<=`, `>`, `>=`, Entre, Contém, Regex, É verdadeiro, É falso, É nulo, Não é nulo, É vazio, Não é vazio (número e verdadeiro/falso contam como não vazios, inclusive `0` e `false`) e **Hora \| Sol** |
 | Valor alvo | com o que comparar (texto ou número) |
 | E | abre mais um degrau de condição (veja **Escada de condições**) |
-| Esperar Por | (só aparece quando o Se tem condição, não em Ignorar) segundos de espera antes de enviar ("X segundos se não mudar"); se o valor deixar de cumprir a condição durante a espera, o envio é cancelado (ocupação com atraso para desligar); com `global.` ou `flow.`, o nó relê a variável no fim da espera |
+| Esperar Por | (só aparece quando o Se tem condição, não em Ignorar) segundos de espera antes de enviar ("X segundos se não mudar"); se o valor deixar de cumprir a condição durante a espera, o envio é cancelado (ocupação com atraso para desligar); com `global.` ou `flow.`, o nó relê a variável no fim da espera. A espera continua depois de um deploy ou reinício do Node-RED |
 | Enviar | texto, número, booleano, JSON ou **Entrada** (o valor recebido) |
 | Enviar Sempre | (Estado) marcado, envia a cada disparo; desmarcado, a regra ignora o valor igual ao último que ela mesma enviou (volta a enviar depois que outra regra mudar o estado) |
 | MQTT | publica direto no broker (Broker, Tópico, QoS, Retain) |
@@ -71,7 +71,7 @@ Marcando **E** abaixo do **Se**, a regra ganha mais um degrau, e cada degrau pod
 - **Só o primeiro degrau dispara** (o Selecionar da regra, que aceita qualquer tipo de Entrada).
 - Os degraus **E** apenas **conferem o valor atual** de Entradas `global.` ou `flow.`, com comparações (`==`, `!=`, `<`, `<=`, `>`, `>=`, Entre, Contém, Regex, É verdadeiro, É falso, É vazio, Não é vazio). Variável que não existe torna a condição falsa.
 - Todas as regras leem as variáveis antes de qualquer uma gravar.
-- Uma mudança numa variável de degrau **nunca dispara** a regra; ela só faz a regra esquecer o que já enviou, para o mesmo comando voltar a valer (conferido a cada 1 s e a cada disparo).
+- Uma mudança numa variável de degrau **nunca dispara** a regra; quando a escada passa a valer ou deixa de valer, a regra esquece o que já enviou, para o mesmo comando voltar a valer (conferido a cada 1 s e a cada disparo). Um valor que muda sem alterar o resultado (uma temperatura que oscila acima do limite) não conta.
 - Com **Esperar Por**, o nó confere a escada de novo no fim da espera; uma mudança que vai e volta no meio da espera não é vista.
 - Com Selecionar em **Qualquer entrada** não há E.
 
