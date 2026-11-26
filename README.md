@@ -34,12 +34,14 @@ O campo **Tipo de ação** (logo abaixo de Nome) define o que o nó faz e quais 
 
 Uma lista numerada. Cada Entrada tem uma **Propriedade**: de onde ler o valor, como no nó *switch* (`msg.`, `flow.` ou `global.` mais o caminho, por exemplo `msg.payload.temperatura`; `msg.payload` sozinho é o payload inteiro; texto JSON é lido como objeto). Chave ausente na mensagem é ignorada, então mensagens de outros aparelhos no mesmo tópico não interferem. A Entrada nunca grava variável global: isso é feito na Saída.
 
-No **Estado**, cada Entrada tem duas caixas que não funcionam juntas (marcar uma desmarca a outra):
+No **Estado**, cada Entrada tem três caixas que não funcionam juntas (marcar uma desmarca as outras):
+
+- **Ping**: pede o **Endereço** (IP ou nome, sem `http://`), a **Porta** (opcional) e o **Intervalo** em segundos (padrão 10, mínimo 5). Com a Porta vazia é o ping comum; com uma porta (por exemplo `443`) o nó mede o tempo para abrir a conexão, útil para saber se um site ou a internet estão no ar quando a rede bloqueia ping. A Propriedade recebe o **tempo de resposta em milissegundos**, número inteiro; **`0` significa sem resposta** em 2 segundos (uma resposta abaixo de 1 ms vale 1). Na Saída: `> 0` está no ar, `== 0` caiu (com Esperar Por para não acusar uma falha isolada), `> 200` está lento. Depende de o Node-RED ter o comando `ping` e de a rede permitir ICMP: algumas redes bloqueiam ping para a internet, e então um endereço de fora sempre vale 0.
 
 - **MQTT**: o próprio nó se inscreve num tópico (Broker, Tópico com `+` e `#`, QoS), sem precisar de `mqtt in`. A Propriedade é o que será lido da mensagem.
 - **Hora | Sol**: abre uma lista com **Intervalo** (a cada N segundos), **Hora fixa** (HH:MM), **Nascer do sol** ou **Pôr do sol**. A Propriedade é o que vai para a Saída (uma mensagem com a hora ou o valor atual de uma variável). Hora fixa e sol têm os **Dias** da semana. Dispara também uma vez ao iniciar. Dispensa o `inject`.
 
-Sem nenhuma das duas caixas, com Propriedade `global.` ou `flow.`, a Entrada observa mudanças da variável.
+Sem nenhuma das caixas, com Propriedade `global.` ou `flow.`, a Entrada observa mudanças da variável.
 
 No **Comando** a Entrada também pode ser MQTT (ela é alimentada só pelo tópico; a mensagem do fio alimenta as outras Entradas). A **Leitura de Estado** não tem MQTT na Entrada: ela lê `msg.` (da mensagem que dispara o nó), `flow.` ou `global.`; para receber de um tópico use o **Estado**.
 
@@ -50,7 +52,7 @@ Uma lista de regras. **Todas as regras são conferidas**: cada uma que cumpre a 
 | Campo | O que faz |
 |---|---|
 | Selecionar | qual Entrada a regra observa (ou qualquer uma) |
-| Se | condição: **Ignorar** (padrão, sempre dispara), `==`, `!=`, `<`, `<=`, `>`, `>=`, Entre, Contém, Regex, É verdadeiro, É falso, É nulo, Não é nulo, É vazio, Não é vazio e **Hora \| Sol** |
+| Se | condição: **Ignorar** (padrão, sempre dispara), `==`, `!=`, `<`, `<=`, `>`, `>=`, Entre, Contém, Regex, É verdadeiro, É falso, É nulo, Não é nulo, É vazio, Não é vazio (número e verdadeiro/falso contam como não vazios, inclusive `0` e `false`) e **Hora \| Sol** |
 | Valor alvo | com o que comparar (texto ou número) |
 | Esperar Por | (só aparece quando o Se tem condição, não em Ignorar) segundos de espera antes de enviar ("X segundos se não mudar"); se o valor deixar de cumprir a condição durante a espera, o envio é cancelado (ocupação com atraso para desligar); com `global.` ou `flow.`, o nó relê a variável no fim da espera |
 | Enviar | texto, número, booleano, JSON ou **Entrada** (o valor recebido) |
@@ -71,6 +73,7 @@ O operador **Hora | Sol** é verdadeiro quando a hora do momento está entre **D
 - **Ocupação com atraso** (Estado): regra `== 1` grava ON na hora; regra `== 0` grava OFF com Esperar Por 15 segundos. Um `1` no meio cancela a espera.
 - **Dia e noite** (Estado): uma Entrada Hora | Sol → Nascer do sol com regra Ignorar enviando `Dia` e outra → Pôr do sol enviando `Noite`, gravando a mesma variável.
 - **Gatilho a cada 10 s** (Estado): Entrada Hora | Sol → Intervalo 10, regra Ignorar enviando `start` com Enviar Sempre marcado (no lugar de um `inject`).
+- **Aparelho no ar** (Estado): Entrada Ping com o IP; regra `> 0` enviando `ON` e regra `== 0` com Esperar Por 30 enviando `OFF`, gravando a mesma variável.
 - **Publicar no MQTT** (Comando): Entrada `msg.payload`, regra Ignorar com MQTT (Broker e Tópico) enviando a Entrada (no lugar de um `mqtt out`).
 - **Mensagem fixa** (Leitura de Estado): Entrada `msg._msgid`, regra Ignorar com Enviar JSON (no lugar de um `template`).
 
