@@ -30,6 +30,10 @@ O campo **Tipo de ação** (logo abaixo de Nome) define o que o nó faz e quais 
 | **Leitura** | entrada e saída | a mensagem que chega é só o gatilho: o nó lê as Entradas e roda as regras |
 | **Comando** | só entrada | recebe uma mensagem e publica no MQTT pelas regras |
 
+## Ajuda nos campos
+
+Parando o mouse sobre o **nome de um campo** aparece um balão explicando o que ele faz. O texto muda conforme o Tipo de ação, a caixa marcada na Entrada e a condição escolhida.
+
 ## Broker MQTT
 
 Onde houver o campo **Broker** (Entrada e Saída), o botão **+** cadastra um broker novo e o **lápis** edita o escolhido, com a mesma janela do nó MQTT do Node-RED.
