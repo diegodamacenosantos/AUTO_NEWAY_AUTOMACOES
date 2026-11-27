@@ -27,8 +27,12 @@ O campo **Tipo de ação** (logo abaixo de Nome) define o que o nó faz e quais 
 | Tipo | Portas | Para que serve |
 |---|---|---|
 | **Estado** | só saída | observa algo (MQTT, horário, intervalo, variável) e envia o estado |
-| **Leitura de Estado** | entrada e saída | a mensagem que chega é só o gatilho: o nó lê as Entradas e roda as regras |
+| **Leitura** | entrada e saída | a mensagem que chega é só o gatilho: o nó lê as Entradas e roda as regras |
 | **Comando** | só entrada | recebe uma mensagem e publica no MQTT pelas regras |
+
+## Broker MQTT
+
+Onde houver o campo **Broker** (Entrada e Saída), o botão **+** cadastra um broker novo e o **lápis** edita o escolhido, com a mesma janela do nó MQTT do Node-RED.
 
 ## Entrada
 
@@ -43,7 +47,7 @@ No **Estado**, cada Entrada tem três caixas que não funcionam juntas (marcar u
 
 Sem nenhuma das caixas, com Propriedade `global.` ou `flow.`, a Entrada observa mudanças da variável.
 
-No **Comando** a Entrada também pode ser MQTT (ela é alimentada só pelo tópico; a mensagem do fio alimenta as outras Entradas). A **Leitura de Estado** não tem MQTT na Entrada: ela lê `msg.` (da mensagem que dispara o nó), `flow.` ou `global.`; para receber de um tópico use o **Estado**.
+No **Comando** a Entrada também pode ser MQTT (ela é alimentada só pelo tópico; a mensagem do fio alimenta as outras Entradas). A **Leitura** não tem MQTT na Entrada: ela lê `msg.` (da mensagem que dispara o nó), `flow.` ou `global.`; para receber de um tópico use o **Estado**.
 
 ## Saída
 
@@ -62,7 +66,7 @@ Uma lista de regras. **Todas as regras são conferidas**: cada uma que cumpre a 
 | Gravar Global | grava o valor numa variável global |
 | MSG | envia o valor pela porta de saída (Propriedade `msg.`, `payload` por padrão); só regras com MSG marcada têm porta |
 
-O operador **Hora | Sol** é verdadeiro quando a hora do momento está entre **Das** e **Até**, nos **Dias** marcados. Cada ponta é uma hora fixa ou, na Leitura de Estado e no Comando, também nascer ou pôr do sol, com deslocamento em minutos. O intervalo pode passar da meia-noite.
+O operador **Hora | Sol** é verdadeiro quando a hora do momento está entre **Das** e **Até**, nos **Dias** marcados. Cada ponta é uma hora fixa ou, na Leitura e no Comando, também nascer ou pôr do sol, com deslocamento em minutos. O intervalo pode passar da meia-noite.
 
 ### Escada de condições
 
@@ -91,7 +95,7 @@ Atenção em "presença **E** noite": se anoitecer com a pessoa já no cômodo, 
 - **Gatilho a cada 10 s** (Estado): Entrada Hora | Sol → Intervalo 10, regra Ignorar enviando `start` com Enviar Sempre marcado (no lugar de um `inject`).
 - **Aparelho no ar** (Estado): Entrada Ping com o IP; regra `> 0` enviando `ON` e regra `== 0` com Esperar Por 30 enviando `OFF`, gravando a mesma variável.
 - **Publicar no MQTT** (Comando): Entrada `msg.payload`, regra Ignorar com MQTT (Broker e Tópico) enviando a Entrada (no lugar de um `mqtt out`).
-- **Mensagem fixa** (Leitura de Estado): Entrada `msg._msgid`, regra Ignorar com Enviar JSON (no lugar de um `template`).
+- **Mensagem fixa** (Leitura): Entrada `msg._msgid`, regra Ignorar com Enviar JSON (no lugar de um `template`).
 
 ## Etiqueta
 
