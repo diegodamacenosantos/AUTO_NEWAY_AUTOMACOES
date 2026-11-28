@@ -59,7 +59,7 @@ Uma lista de regras. **Todas as regras são conferidas**: cada uma que cumpre a 
 
 | Campo | O que faz |
 |---|---|
-| Selecionar | qual Entrada a regra observa (ou qualquer uma) |
+| Selecionar | quais Entradas a regra monitora: uma, **várias** (marcando na lista) ou **Qualquer entrada** (veja **Várias Entradas na mesma regra**) |
 | Se | condição: **Ignorar** (padrão, sempre dispara), `==`, `!=`, `<`, `<=`, `>`, `>=`, Entre, Contém, Regex, É verdadeiro, É falso, É nulo, Não é nulo, É vazio, Não é vazio (número e verdadeiro/falso contam como não vazios, inclusive `0` e `false`) e **Hora \| Sol** |
 | Valor alvo | com o que comparar (texto ou número) |
 | E | abre mais um degrau de condição (veja **Escada de condições**) |
@@ -71,6 +71,15 @@ Uma lista de regras. **Todas as regras são conferidas**: cada uma que cumpre a 
 | MSG | envia o valor pela porta de saída (Propriedade `msg.`, `payload` por padrão); só regras com MSG marcada têm porta |
 
 O operador **Hora | Sol** é verdadeiro quando a hora do momento está entre **Das** e **Até**, nos **Dias** marcados. Cada ponta é uma hora fixa ou, na Leitura e no Comando, também nascer ou pôr do sol, com deslocamento em minutos. O intervalo pode passar da meia-noite.
+
+### Várias Entradas na mesma regra
+
+Em **Selecionar** abre uma lista para marcar uma ou mais Entradas.
+
+- **Qualquer uma das marcadas dispara** a regra, e o **Se** e o **Enviar** usam o valor de quem disparou. Não é preciso que todas valham juntas; para exigir mais de uma condição use o **E**.
+- **Esperar Por** conta separado para cada Entrada: uma que deixa de valer cancela só a espera dela.
+- Sem **Enviar Sempre**, o valor repetido é comparado separado para cada Entrada. Com **Gravar Global** ou MQTT, quando outra Entrada muda o valor gravado ou publicado, a primeira volta a valer.
+- **Qualquer entrada** inclui também as Entradas criadas depois; marcando uma a uma, as novas ficam de fora.
 
 ### Escada de condições
 
